@@ -1,49 +1,97 @@
 package com.codenation.modelo;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import org.springframework.data.annotation.CreatedDate;
-import com.codenation.enumeracao.Level;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-//Classe modelo da entidade utilizada para armazenar os logs de erros
-@Data
-@Setter
-@Getter
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "logs")
-public class LogEvento {
+@EntityListeners(AuditingEntityListener.class)
+//Classe modelo da entidade utilizada para armazenar os logs de erros
+public class LogEvento implements Serializable {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
-	
-	@Enumerated
-	@Column(nullable = false)
-	private Level level;
-	
+
 	@Column(name = "descricao_evento")
 	private String descricaoEvento;
 	
-	@Column(name = "log_evento",nullable = false)
 	@NotBlank
+	@Column(name = "log_evento",nullable = false)
 	private String logEvento;
 	
 	@Column
 	private String origem;
 	
-	@JsonFormat(pattern = "dd-MM-yyyy HH:mm")
 	@CreatedDate
-	@Column(nullable = false)
-	private LocalDateTime data;
-	
+	@Column(columnDefinition = "timestamp default current_timestamp")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+	private LocalDateTime data;	
+
 	@Column
 	@PositiveOrZero
 	private Long quantidade;
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getDescricaoEvento() {
+		return descricaoEvento;
+	}
+
+	public void setDescricaoEvento(String descricaoEvento) {
+		this.descricaoEvento = descricaoEvento;
+	}
+
+	public String getLogEvento() {
+		return logEvento;
+	}
+
+	public void setLogEvento(String logEvento) {
+		this.logEvento = logEvento;
+	}
+
+	public String getOrigem() {
+		return origem;
+	}
+
+	public void setOrigem(String origem) {
+		this.origem = origem;
+	}
+
+	public LocalDateTime getData() {
+		return data;
+	}
+
+	public void setData(LocalDateTime data) {
+		this.data = data;
+	}
+
+	public Long getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(Long quantidade) {
+		this.quantidade = quantidade;
+	}
 		
 }

@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.codenation.enumeracao.Level;
+import com.codenation.conversor.sql.StringParaEnumOpSQL;
+import com.codenation.enumeracao.OperacaoSQL;
+import com.codenation.especificacao.CriteriaQueryConstrutor;
+import com.codenation.especificacao.LogEventoEspecificacao;
 import com.codenation.modelo.LogEvento;
 import com.codenation.repositorio.LogEventoRepositorio;
 import com.codenation.servico.interfaces.LogEventoServicoInterface;
@@ -18,12 +21,18 @@ public class LogEventoServico implements LogEventoServicoInterface {
 
 	@Autowired
 	private LogEventoRepositorio repositorio;
+	@Autowired(required = false)
+	private LogEventoEspecificacao especificacao;
+	
+	public LogEventoServico() {
+		especificacao = new LogEventoEspecificacao();
+	}
 
 	/*
 	 * salva um novo objeto LogEvento
 	 */
 	@Override
-	public LogEvento salvar(LogEvento logEvento) {
+	public LogEvento salva(LogEvento logEvento) {
 		return this.repositorio.save(logEvento);
 	}
 
@@ -31,8 +40,8 @@ public class LogEventoServico implements LogEventoServicoInterface {
 	 * deleta um objeto LogEvento
 	 */
 	@Override
-	public void deletar(LogEvento logEvento) {
-		this.repositorio.delete(logEvento);
+	public void deleta(Long id) {
+		this.repositorio.deleteById(id);
 	}
 	
 	/*
@@ -40,8 +49,8 @@ public class LogEventoServico implements LogEventoServicoInterface {
 	 * lista todos os logs
 	 */
 	@Override
-	public List<LogEvento> encontrarTodos(Pageable pageable) {
-		return this.repositorio.findAll();
+	public Iterable<LogEvento> encontraTodos(Pageable paginavel) {
+		return this.repositorio.findAll(paginavel);
 	}
 	
 	/*
@@ -49,34 +58,19 @@ public class LogEventoServico implements LogEventoServicoInterface {
 	 * retorna um objeto LogEvento conforme o ID informado
 	 */
 	@Override
-	public Optional<LogEvento> encontrarPorId(Long id) {
+	public Optional<LogEvento> encontraPorId(Long id) {
 		return this.repositorio.findById(id);
 	}
-
-	/*
-	 * @return List<LogEvento> 
-	 * lista todos os logs por determinado level (error, warning, info)
-	 */
-	@Override
-	public List<LogEvento> encontrarPorLevel(Level level, Pageable paginavel) {
-		return this.repositorio.findByLevel(level, paginavel);
-	}
-
+	
 	/*
 	 * @return List<LogEvento> 
 	 * lista todos os logs por determinadas colunas e ordenacao
 	 */
 	@Override
-	public List<LogEvento> listarColunaOrdenadaPor(String coluna, String ordem, Pageable paginavel) {
-		return this.repositorio.orderBy(coluna, ordem, paginavel);
+	public List<LogEvento> listaColunaOrdenadaPor(String coluna, Object argumentoQuery, String tipoOrdenacao, Pageable paginavel) {
+		OperacaoSQL query = new StringParaEnumOpSQL().converteOperacaoSQL(tipoOrdenacao);
+		especificacao.adiciona(new CriteriaQueryConstrutor(coluna,argumentoQuery,query));
+		return this.repositorio.findAll(especificacao,paginavel).getContent();
 	}
 	
-	/*
-	 * @return List<LogEvento> 
-	 * lista todos os logs por determinada coluna
-	 */
-	@Override
-	public List<LogEvento> listarColuna(String coluna, Pageable paginavel) {
-		return this.repositorio.findBy(coluna, paginavel);
-	}
 }
