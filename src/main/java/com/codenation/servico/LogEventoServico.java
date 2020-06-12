@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.codenation.conversor.sql.StringParaEnumOpSQL;
@@ -35,22 +37,14 @@ public class LogEventoServico implements LogEventoServicoInterface {
 	public LogEvento salva(LogEvento logEvento) {
 		return this.repositorio.save(logEvento);
 	}
-
-	/*
-	 * deleta um objeto LogEvento
-	 */
-	@Override
-	public void deleta(Long id) {
-		this.repositorio.deleteById(id);
-	}
 	
 	/*
 	 * @return List<LogEvento> 
 	 * lista todos os logs
 	 */
 	@Override
-	public Iterable<LogEvento> encontraTodos(Pageable paginavel) {
-		return this.repositorio.findAll(paginavel);
+	public List<LogEvento> encontraTodos(Pageable paginavel) {
+		return this.repositorio.findAll(paginavel).getContent();
 	}
 	
 	/*

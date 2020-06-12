@@ -32,19 +32,9 @@ public class LogEventoControlador {
 		return new ResponseEntity<LogEvento>(this.logEventoServico.salva(logEvento), HttpStatus.CREATED);
 	}
 	
-	@DeleteMapping("/{id}")
-	@ApiOperation("Deleta um objeto LogEvento")
-	public HttpStatus deleta(@PathVariable Long id) {
-		if(id == null | id < 0) {
-			return HttpStatus.BAD_REQUEST;
-		}
-		this.logEventoServico.deleta(id);
-		return HttpStatus.OK;
-	}
-	
 	@GetMapping
 	@ApiOperation("retorna todos os log's de eventos registrados")
-	public Iterable<LogEvento> encontraTodos(Pageable paginavel) {
+	public List<LogEvento> encontraTodos(Pageable paginavel) {
 		return this.logEventoServico.encontraTodos(paginavel);
 	}
 	

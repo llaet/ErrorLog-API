@@ -1,19 +1,8 @@
 package com.codenation.enumeracao;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.io.Serializable;
 
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public enum Level {
+public enum Level implements Serializable {
 
-	ERROR("Error"), WARNING("Warning"), INFO("Info");
-	
-	private String status;
-	
-	private Level(String status) {
-		this.status = status;
-	}
-	
-	public String retornaStatus() {
-		return status;
-	}
+	ERROR, WARNING, INFO;
 }

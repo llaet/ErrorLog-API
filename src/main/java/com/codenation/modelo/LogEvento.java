@@ -9,6 +9,7 @@ import javax.validation.constraints.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.codenation.enumeracao.Level;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
@@ -26,6 +27,10 @@ public class LogEvento implements Serializable {
 	@Column
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
+
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private Level level;
 
 	@Column(name = "descricao_evento")
 	private String descricaoEvento;
@@ -92,6 +97,14 @@ public class LogEvento implements Serializable {
 
 	public void setQuantidade(Long quantidade) {
 		this.quantidade = quantidade;
+	}
+	
+	public Level getLevel() {
+		return level;
+	}
+
+	public void setLevel(Level level) {
+		this.level = level;
 	}
 		
 }
