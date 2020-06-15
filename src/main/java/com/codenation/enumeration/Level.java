@@ -1,4 +1,4 @@
-package com.codenation.enumeracao;
+package com.codenation.enumeration;
 
 import java.io.Serializable;
 

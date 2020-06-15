@@ -6,10 +6,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableJpaAuditing
 @SpringBootApplication
-public class ErrosCentralApiApplication {
+public class ErrorCentralApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ErrosCentralApiApplication.class, args);
+		SpringApplication.run(ErrorCentralApiApplication.class, args);
 	}
 
 }
