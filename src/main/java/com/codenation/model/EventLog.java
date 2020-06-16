@@ -1,6 +1,5 @@
 package com.codenation.model;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.*;
@@ -22,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "logs")
 @EntityListeners(AuditingEntityListener.class)
 //model
-public class EventLog implements Serializable {
+public class EventLog {
 		
 		@Id
 		@Column
