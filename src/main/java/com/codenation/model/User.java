@@ -1,6 +1,9 @@
 package com.codenation.model;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,9 +12,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,20 +32,20 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints =  @UniqueConstraint(columnNames = "email"))
 @EntityListeners(AuditingEntityListener.class)
-public class User {
+public class User implements UserDetails {
 
 	@Id
 	@Column
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	private UUID id;
 	
-	@Column(name = "user_mail", nullable = false)
-	private String userMail;
+	@Column(nullable = false, unique = true)
+	private String email;
 	
-	@Column(name = "user_password", nullable = false)
-	private String userPassword;
+	@Column(name = "password_key", nullable = false)
+	private String passwordKey;
 	
     @CreatedDate
     @JsonIgnore
@@ -45,28 +53,38 @@ public class User {
 	@Column(name = "created_at", columnDefinition = "timestamp default current_timestamp")
     private LocalDateTime createdAt;
 
-	public Long getId() {
+    public User() {}
+    
+	public User(UUID id, String email, String password, LocalDateTime createdAt) {
+		super();
+		this.id = id;
+		this.email = email;
+		this.passwordKey = password;
+		this.createdAt = createdAt;
+	}
+
+	public UUID getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 
-	public String getUserMail() {
-		return userMail;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setUserMail(String userMail) {
-		this.userMail = userMail;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
-	public String getUserPassword() {
-		return userPassword;
+	public void setPassword(String passwordKey) {
+		this.passwordKey = passwordKey;
 	}
-
-	public void setUserPassword(String userPassword) {
-		this.userPassword = userPassword;
+	
+	public String getPasswordKey(String passwordKey) {
+		return passwordKey;
 	}
 
 	public LocalDateTime getCreatedAt() {
@@ -75,5 +93,40 @@ public class User {
 
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Arrays.asList(new SimpleGrantedAuthority("ADMIN"));
+	}
+
+	@Override
+	public String getPassword() {
+		return new BCryptPasswordEncoder().encode(passwordKey);
+	}
+
+	@Override
+	public String getUsername() {
+		return this.email;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}    
 }

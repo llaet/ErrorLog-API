@@ -41,13 +41,13 @@ public class EventLogController {
 	
 	@GetMapping
 	@ApiOperation("return all event log objects")
-	public List<EventLogDTO> encontraTodos(Pageable pageable) {
+	public List<EventLogDTO> findAll(Pageable pageable) {
 		return service.findAll(pageable);
 	}
 	
 	@GetMapping("/{id}")
 	@ApiOperation("return a event log by id")
-	public ResponseEntity<EventLogDTO> encontraPorId(@PathVariable Long id) {
+	public ResponseEntity<EventLogDTO> findById(@PathVariable Long id) {
 		return ResponseEntity.ok(service.findById(id));
 	}
 	
@@ -58,7 +58,7 @@ public class EventLogController {
 			+ "/column/lt-queryArgument (less than)"
 			+ "/column/gte-queryArgument (greater than or equal)"
 			+ "/column/lte-queryArgument (less than or equal)")
-	public Iterable<EventLogDTO> listaColunaOrdenadaPor(
+	public Iterable<EventLogDTO> orderBy(
 			@PathVariable String column,
 			@PathVariable String operation, 
 			@PathVariable Object queryArgument, 			
