@@ -10,14 +10,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.codenation.enumeration.Level;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "logs")
 @EntityListeners(AuditingEntityListener.class)
 //model
