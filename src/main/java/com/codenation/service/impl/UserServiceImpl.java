@@ -21,6 +21,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		return this.repository.saveAndFlush(user);
 	}
 
+	/*
+	 * @return UserDetails
+	 * return a UserDetails object found by email param
+	 */
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		return this.repository.findByEmail(username);

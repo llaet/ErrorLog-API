@@ -49,9 +49,12 @@ public class EventLogServiceImpl implements EventLogService{
 	 */
 	@Override
 	public List<EventLogDTO> orderBy(String column, Object queryArgument, String sortedBy, Pageable pageable) {
+		//parse a String to SQL Operation object
 		SQLOperation operation = new StringToQueryConverter().toSQLOperation(sortedBy);
+		//create a specification for a new sql query
 		this.especification.add(new CriteriaQueryConstructor(column, queryArgument, operation));
 		List<EventLog> eventLog = repository.findAll(especification,pageable).getContent();
+		//map the objects to DTO and return them
 		return eventLog.stream().map(log -> mapper.toDTO(log)).collect(Collectors.toList());
 	}
 

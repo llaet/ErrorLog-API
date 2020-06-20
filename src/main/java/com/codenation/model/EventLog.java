@@ -50,6 +50,18 @@ public class EventLog {
 		@PositiveOrZero
 		private Long quantity;
 
+		public EventLog(Long id, Level level, String eventDescription, @NotBlank String eventLog, String origin,
+				LocalDateTime createdAt, @PositiveOrZero Long quantity) {
+			super();
+			this.id = id;
+			this.level = level;
+			this.eventDescription = eventDescription;
+			this.eventLog = eventLog;
+			this.origin = origin;
+			this.createdAt = createdAt;
+			this.quantity = quantity;
+		}
+
 		public Long getId() {
 			return id;
 		}

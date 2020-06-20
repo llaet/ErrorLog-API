@@ -20,6 +20,8 @@ import com.codenation.model.EventLog;
 import com.codenation.service.impl.EventLogServiceImpl;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/log")
@@ -31,6 +33,7 @@ public class EventLogController {
 	
 	@PostMapping
 	@ApiOperation("create a new event log object")
+	@ApiResponses(value = {@ApiResponse(code = 400, message = "JSON object not valid"), @ApiResponse(code = 201, message = "object created")})
 	public HttpStatus save(@Valid @RequestBody EventLog eventLog) {
 		if(eventLog == null) {
 			return HttpStatus.BAD_REQUEST;
@@ -41,29 +44,29 @@ public class EventLogController {
 	
 	@GetMapping
 	@ApiOperation("return all event log objects")
-	public List<EventLogDTO> findAll(Pageable pageable) {
-		return service.findAll(pageable);
+	@ApiResponses(value = @ApiResponse(code = 200, message = "list of objects found"))
+	public ResponseEntity<List<EventLogDTO>> findAll(Pageable pageable) {
+		return ResponseEntity.ok(service.findAll(pageable));
 	}
 	
 	@GetMapping("/{id}")
 	@ApiOperation("return a event log by id")
+	@ApiResponses(value = {@ApiResponse(code = 404, message = "event log not found"), @ApiResponse(code = 200, message = "event log found")})
 	public ResponseEntity<EventLogDTO> findById(@PathVariable Long id) {
-		return ResponseEntity.ok(service.findById(id));
+		return ResponseEntity.ok(this.service.findById(id));
 	}
 	
-	@GetMapping("/{column}/{operation}-{queryArgument}")
-	@ApiOperation("return a list of event log sorted"
-			+ "/column/like-queryArgument"
-			+ "/column/gt-queryArgument (greater than)"
-			+ "/column/lt-queryArgument (less than)"
-			+ "/column/gte-queryArgument (greater than or equal)"
-			+ "/column/lte-queryArgument (less than or equal)")
-	public Iterable<EventLogDTO> orderBy(
+	@GetMapping("/{column}/{operationPrefix}-{queryArgument}")
+	@ApiOperation("return a list of event log sorted by - "
+			+ "$operation = like | gt (greater than) | lt (less than) "
+			+ "| gte (greater than or equal) | lte (less than or equal)")
+	@ApiResponses(value = @ApiResponse(code = 200, message = "list of objects found"))
+	public ResponseEntity<Iterable<EventLogDTO>> orderBy(
 			@PathVariable String column,
-			@PathVariable String operation, 
+			@PathVariable String operationPrefix, 
 			@PathVariable Object queryArgument, 			
 			Pageable pageable) {
-		return this.service.orderBy(column, queryArgument, operation, pageable);
+		return ResponseEntity.ok(service.orderBy(column, queryArgument, operationPrefix, pageable));
 	}
 
 }
