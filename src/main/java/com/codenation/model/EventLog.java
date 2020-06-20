@@ -46,6 +46,8 @@ public class EventLog {
 		@PositiveOrZero
 		private Long quantity;
 
+		public EventLog(){}
+	
 		public EventLog(Long id, Level level, String eventDescription, @NotBlank String eventLog, String origin,
 				LocalDateTime createdAt, @PositiveOrZero Long quantity) {
 			super();
