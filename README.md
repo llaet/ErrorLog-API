@@ -33,6 +33,7 @@
 	New error log		| POST	| /log
 	Get all logs		| GET	| /log
 	Get log by id		| GET	| /log/:id
+	Get log by level	| GET	| /log/level/:level
 	Get all logs with query	| GET	| /log/:column/:sort-:argument
 
 ###### About me:
