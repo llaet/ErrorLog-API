@@ -10,10 +10,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.codenation.enumeration.Level;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "logs")
 @EntityListeners(AuditingEntityListener.class)
 //model
@@ -46,8 +50,8 @@ public class EventLog {
 		@PositiveOrZero
 		private Long quantity;
 
-		public EventLog(){}
-	
+		public EventLog() {}
+		
 		public EventLog(Long id, Level level, String eventDescription, @NotBlank String eventLog, String origin,
 				LocalDateTime createdAt, @PositiveOrZero Long quantity) {
 			super();

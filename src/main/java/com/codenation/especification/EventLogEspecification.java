@@ -26,7 +26,7 @@ public class EventLogEspecification implements Specification<EventLog> {
 		switch(queryConstructor.getQueryOperation().toString()) {
 		case "LIKE":
 			return criteriaBuilder.like(root.get(queryConstructor.getColumn()), 
-				"%" + queryConstructor.getQueryArgument().toString().toLowerCase() + "%");
+				"%" + queryConstructor.getQueryArgument() + "%");
 		case "GREATER_THAN":
 			return criteriaBuilder.greaterThan(root.get(queryConstructor.getColumn()), queryConstructor.getQueryArgument().toString());
 		case "LESS_THAN":

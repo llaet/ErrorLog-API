@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codenation.dto.EventLogDTO;
+import com.codenation.enumeration.Level;
 import com.codenation.model.EventLog;
 import com.codenation.service.impl.EventLogServiceImpl;
 
@@ -54,6 +55,13 @@ public class EventLogController {
 	@ApiResponses(value = {@ApiResponse(code = 404, message = "event log not found"), @ApiResponse(code = 200, message = "event log found")})
 	public ResponseEntity<EventLogDTO> findById(@PathVariable Long id) {
 		return ResponseEntity.ok(this.service.findById(id));
+	}
+	
+	@GetMapping("/level/{level}")
+	@ApiOperation("return a list of event log by level")
+	@ApiResponses(value = @ApiResponse(code = 200, message = "list of objects found"))
+	public ResponseEntity<List<EventLogDTO>> findByLevel(@PathVariable Level level, Pageable pageable) {
+		return ResponseEntity.ok(this.service.findByLevel(level,pageable));
 	}
 	
 	@GetMapping("/{column}/{operationPrefix}-{queryArgument}")

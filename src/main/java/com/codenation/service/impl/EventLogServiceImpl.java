@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.codenation.converter.mapper.EventLogMapper;
 import com.codenation.converter.sql.StringToQueryConverter;
 import com.codenation.dto.EventLogDTO;
+import com.codenation.enumeration.Level;
 import com.codenation.enumeration.SQLOperation;
 import com.codenation.especification.CriteriaQueryConstructor;
 import com.codenation.especification.EventLogEspecification;
@@ -74,6 +75,16 @@ public class EventLogServiceImpl implements EventLogService{
 	@Override
 	public void save(EventLog eventLog) {
 		this.repository.saveAndFlush(eventLog);
+	}
+
+	/*
+	 * @return List<LogEventDTO>
+	 * return a list of event log whith the level type param received
+	 */
+	@Override
+	public List<EventLogDTO> findByLevel(Level level, Pageable pageable) {
+		List<EventLog> logs = repository.findByLevel(level, pageable);
+		return logs.stream().map(log -> mapper.toDTO(log)).collect(Collectors.toList());
 	}
 
 
