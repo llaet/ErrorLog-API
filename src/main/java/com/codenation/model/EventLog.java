@@ -16,8 +16,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "logs")
 @EntityListeners(AuditingEntityListener.class)
 //model
