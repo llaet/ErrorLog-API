@@ -34,5 +34,6 @@ public class UserServiceImplTests {
 		
 		//assertion
 		assertEquals(email, this.service.loadUserByUsername(email).getUsername());
+		assertEquals(user, this.service.loadUserByUsername(email));
 	}
 }
