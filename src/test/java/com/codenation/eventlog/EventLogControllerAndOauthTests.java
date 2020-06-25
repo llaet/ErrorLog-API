@@ -42,7 +42,6 @@ public class EventLogControllerAndOauthTests {
     private String getAccessToken(String username, String password) throws Exception {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "password");
-        params.add("admin", "admin123");
         params.add("username", username);
         params.add("password", password);
         
@@ -65,4 +64,213 @@ public class EventLogControllerAndOauthTests {
     	mockMvc.perform(get("/log"))
     		      .andExpect(status().isUnauthorized());			      
     }
+    
+    @Test
+    public void whenHasToken() throws Exception {
+    	String accessToken = getAccessToken("teste@teste.com","teste123");
+    	mockMvc.perform(get("/log")
+    			.header("Authorization", "Bearer " + accessToken))
+    		      .andExpect(status().isOk());			      
+    }
+    
+    @Test
+    public void whenPerformHttpPostEventLogObjectWithoutToken() throws Exception {
+    	String eventLogJSON = "{\"level\":\"ERROR\","
+    			+ "\"eventDescription\":\"test\","
+    			+ "\"eventLog\":\"testing\","
+    			+ "\"origin\":\"127.188.19.76\","
+    			+ "\"quantity\"" + ": " + 6 + "}";
+    	String contentType = "application/json;charset=UTF-8";
+    	
+    	mockMvc.perform(post("/log")
+    			.contentType(contentType)
+    			.content(eventLogJSON)
+    			.accept(contentType))
+    		      .andExpect(status().isUnauthorized());			      
+    }
+    
+    @Test
+    public void whenPerformHttpPostEventLogObjectWithNullRequiredFieldsAndWithToken() throws Exception {
+    	String accessToken = getAccessToken("teste@teste.com","teste123");
+    	String eventLogJSON = "{\"level\":\"ERROR\","
+    			+ "\"eventDescription\":\"test\","
+    			+ "\"origin\":\"127.188.19.76\","
+    			+ "\"quantity\"" + ": " + 6 + "}";
+    	String contentType = "application/json;charset=UTF-8";
+    	
+    	mockMvc.perform(post("/log")
+    			.header("Authorization", "Bearer " + accessToken)
+    			.contentType(contentType)
+    			.content(eventLogJSON)
+    			.accept(contentType))
+    		      .andExpect(status().isBadRequest());			      
+    }
+    
+    @Test
+    public void whenPerformHttpPostEventLogObjectWithToken() throws Exception {
+    	String accessToken = getAccessToken("teste@teste.com","teste123");
+    	String eventLogJSON = "{\"level\":\"ERROR\","
+    			+ "\"eventDescription\":\"test\","
+    			+ "\"eventLog\":\"testing\","
+    			+ "\"origin\":\"127.188.19.76\","
+    			+ "\"quantity\"" + ": " + 6 + "}";
+    	String contentType = "application/json;charset=UTF-8";
+    	
+    	mockMvc.perform(post("/log")
+    			.header("Authorization", "Bearer " + accessToken)
+    			.contentType(contentType)
+    			.content(eventLogJSON)
+    			.accept(contentType))
+    		      .andExpect(status().isOk());			      
+    }
+    
+    @Test
+    public void whenPerformHttpGetLogByIdWithoutToken() throws Exception {
+    	String accessToken = getAccessToken("teste@teste.com","teste123");
+    	String eventLogJSON = "{\"level\":\"ERROR\","
+    			+ "\"eventDescription\":\"test\","
+    			+ "\"eventLog\":\"testing\","
+    			+ "\"origin\":\"127.188.19.76\","
+    			+ "\"quantity\"" + ": " + 6 + "}";
+    	String contentType = "application/json;charset=UTF-8";
+    	
+    	//just creating the object
+    	mockMvc.perform(post("/log")
+    			.header("Authorization", "Bearer " + accessToken)
+    			.contentType(contentType)
+    			.content(eventLogJSON)
+    			.accept(contentType));
+    	
+    	mockMvc.perform(get("/log/25")
+    			.accept(contentType))
+    		      .andExpect(status().isUnauthorized());			      
+    }
+    
+    @Test
+    public void whenPerformHttpGetLogByIdWithToken() throws Exception {
+    	String accessToken = getAccessToken("teste@teste.com","teste123");
+    	String eventLogJSON = "{\"level\":\"ERROR\","
+    			+ "\"eventDescription\":\"test\","
+    			+ "\"eventLog\":\"testing\","
+    			+ "\"origin\":\"127.188.19.76\","
+    			+ "\"quantity\"" + ": " + 6 + "}";
+    	String contentType = "application/json;charset=UTF-8";
+    	
+    	//just creating the object
+    	mockMvc.perform(post("/log")
+    			.header("Authorization", "Bearer " + accessToken)
+    			.contentType(contentType)
+    			.content(eventLogJSON)
+    			.accept(contentType));
+    	
+    	mockMvc.perform(get("/log/25")
+    			.header("Authorization", "Bearer " + accessToken)
+    			.accept(contentType))
+    		      .andExpect(status().isOk());			      
+    }
+
+    @Test
+    public void whenPerformHttpGetLogByLevelWithoutToken() throws Exception {
+    	String accessToken = getAccessToken("teste@teste.com","teste123");
+    	String eventLogJSON = "{\"level\":\"ERROR\","
+    			+ "\"eventDescription\":\"test\","
+    			+ "\"eventLog\":\"testing\","
+    			+ "\"origin\":\"127.188.19.76\","
+    			+ "\"quantity\"" + ": " + 6 + "}";
+    	String contentType = "application/json;charset=UTF-8";
+    	
+    	//just creating the object
+    	mockMvc.perform(post("/log")
+    			.header("Authorization", "Bearer " + accessToken)
+    			.contentType(contentType)
+    			.content(eventLogJSON)
+    			.accept(contentType));
+    	
+    	mockMvc.perform(get("/log/level/ERROR")
+    			.accept(contentType))
+    		      .andExpect(status().isUnauthorized());			      
+    }
+    
+    @Test
+    public void whenPerformHttpGetLogByLevelWithToken() throws Exception {
+    	String accessToken = getAccessToken("teste@teste.com","teste123");
+    	String eventLogJSON = "{\"level\":\"ERROR\","
+    			+ "\"eventDescription\":\"test\","
+    			+ "\"eventLog\":\"testing\","
+    			+ "\"origin\":\"127.188.19.76\","
+    			+ "\"quantity\"" + ": " + 6 + "}";
+    	String contentType = "application/json;charset=UTF-8";
+    	
+    	//just creating the object
+    	mockMvc.perform(post("/log")
+    			.header("Authorization", "Bearer " + accessToken)
+    			.contentType(contentType)
+    			.content(eventLogJSON)
+    			.accept(contentType));
+    	
+    	mockMvc.perform(get("/log/level/ERROR")
+    			.accept(contentType)
+    				.header("Authorization", "Bearer " + accessToken)
+    				.accept(contentType))
+    		      .andExpect(status().isOk());			      
+    }
+    
+    @Test
+    public void whenPerformHttpGetLogOrderByWithoutToken() throws Exception {
+    	String accessToken = getAccessToken("teste@teste.com","teste123");
+    	String eventLogJSON = "{\"level\":\"ERROR\","
+    			+ "\"eventDescription\":\"test\","
+    			+ "\"eventLog\":\"testing\","
+    			+ "\"origin\":\"127.188.19.76\","
+    			+ "\"quantity\"" + ": " + 6 + "}";
+    	String contentType = "application/json;charset=UTF-8";
+    	
+    	//just creating the object
+    	mockMvc.perform(post("/log")
+    			.header("Authorization", "Bearer " + accessToken)
+    			.contentType(contentType)
+    			.content(eventLogJSON)
+    			.accept(contentType));
+    	
+    	mockMvc.perform(get("/log/quantity/gt-2")
+    			.accept(contentType))
+    		      .andExpect(status().isUnauthorized());			      
+    }
+    
+    @Test
+    public void whenPerformHttpGetLogOrderByWithToken() throws Exception {
+    	String accessToken = getAccessToken("teste@teste.com","teste123");
+    	String eventLogJSON = "{\"level\":\"ERROR\","
+    			+ "\"eventDescription\":\"test\","
+    			+ "\"eventLog\":\"testing\","
+    			+ "\"origin\":\"127.188.19.76\","
+    			+ "\"quantity\"" + ": " + 6 + "}";
+    	String contentType = "application/json;charset=UTF-8";
+    	
+    	//just creating the object
+    	mockMvc.perform(post("/log")
+    			.header("Authorization", "Bearer " + accessToken)
+    			.contentType(contentType)
+    			.content(eventLogJSON)
+    			.accept(contentType));
+    	
+    	mockMvc.perform(get("/log/quantity/gt-2")
+    			.accept(contentType)
+    				.header("Authorization", "Bearer " + accessToken)
+    				.accept(contentType))
+    		      .andExpect(status().isOk());
+    	
+    	mockMvc.perform(get("/log/origin/like-127")
+    			.accept(contentType)
+    				.header("Authorization", "Bearer " + accessToken)
+    				.accept(contentType))
+    		      .andExpect(status().isOk());
+    	
+    	mockMvc.perform(get("/log/eventDescription/like-te")
+    			.accept(contentType)
+    				.header("Authorization", "Bearer " + accessToken)
+    				.accept(contentType))
+    		      .andExpect(status().isOk());	
+    }
+    
 }
