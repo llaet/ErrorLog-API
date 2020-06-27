@@ -22,6 +22,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.github.jsontemplate.JsonTemplate;
+
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
 @SpringBootTest
@@ -75,7 +77,10 @@ public class UserControllerAndOauthTests {
     
     @Test
     public void whenPerformHttpPostUserObjectWithNullRequiredFields() throws Exception {
-    	String eventLogJSON = "{\"email\":\"integration@test.com\"}";
+    	String eventLogJSON = new JsonTemplate(new StringBuilder()
+    			.append("{")
+    			.append("email : integration@test.com")
+    			.append("}").toString()).prettyString(); 
     	String contentType = "application/json;charset=UTF-8";
     	
     	mockMvc.perform(post("/user")
@@ -84,4 +89,5 @@ public class UserControllerAndOauthTests {
     			.accept(contentType))
     		      .andExpect(status().isBadRequest());			      
     }
+    
 }
