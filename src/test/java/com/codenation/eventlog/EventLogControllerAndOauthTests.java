@@ -22,6 +22,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.github.jsontemplate.JsonTemplate;
+
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
 @SpringBootTest
@@ -75,11 +77,14 @@ public class EventLogControllerAndOauthTests {
     
     @Test
     public void whenPerformHttpPostEventLogObjectWithoutToken() throws Exception {
-    	String eventLogJSON = "{\"level\":\"ERROR\","
-    			+ "\"eventDescription\":\"test\","
-    			+ "\"eventLog\":\"testing\","
-    			+ "\"origin\":\"127.188.19.76\","
-    			+ "\"quantity\"" + ": " + 6 + "}";
+    	String eventLogJSON = new JsonTemplate(new StringBuilder()
+    			.append("{")
+    			.append("level : ERROR,")
+    			.append("eventDescription : @s,")
+    			.append("eventLog : @s,")
+    			.append("origin : @ip,")
+    			.append("quantity : @f")
+    			.append("}").toString()).prettyString();
     	String contentType = "application/json;charset=UTF-8";
     	
     	mockMvc.perform(post("/log")
@@ -92,10 +97,13 @@ public class EventLogControllerAndOauthTests {
     @Test
     public void whenPerformHttpPostEventLogObjectWithNullRequiredFieldsAndWithToken() throws Exception {
     	String accessToken = getAccessToken("teste@teste.com","teste123");
-    	String eventLogJSON = "{\"level\":\"ERROR\","
-    			+ "\"eventDescription\":\"test\","
-    			+ "\"origin\":\"127.188.19.76\","
-    			+ "\"quantity\"" + ": " + 6 + "}";
+    	String eventLogJSON = new JsonTemplate(new StringBuilder()
+    			.append("{")
+    			.append("level : ERROR,")
+    			.append("eventDescription : @s,")
+    			.append("origin : @ip,")
+    			.append("quantity : @f")
+    			.append("}").toString()).prettyString();
     	String contentType = "application/json;charset=UTF-8";
     	
     	mockMvc.perform(post("/log")
@@ -109,11 +117,14 @@ public class EventLogControllerAndOauthTests {
     @Test
     public void whenPerformHttpPostEventLogObjectWithToken() throws Exception {
     	String accessToken = getAccessToken("teste@teste.com","teste123");
-    	String eventLogJSON = "{\"level\":\"ERROR\","
-    			+ "\"eventDescription\":\"test\","
-    			+ "\"eventLog\":\"testing\","
-    			+ "\"origin\":\"127.188.19.76\","
-    			+ "\"quantity\"" + ": " + 6 + "}";
+    	String eventLogJSON = new JsonTemplate(new StringBuilder()
+    			.append("{")
+    			.append("level : ERROR,")
+    			.append("eventDescription : @s,")
+    			.append("eventLog : @s,")
+    			.append("origin : @ip,")
+    			.append("quantity : @f")
+    			.append("}").toString()).prettyString();
     	String contentType = "application/json;charset=UTF-8";
     	
     	mockMvc.perform(post("/log")
@@ -127,11 +138,14 @@ public class EventLogControllerAndOauthTests {
     @Test
     public void whenPerformHttpGetLogByIdWithoutToken() throws Exception {
     	String accessToken = getAccessToken("teste@teste.com","teste123");
-    	String eventLogJSON = "{\"level\":\"ERROR\","
-    			+ "\"eventDescription\":\"test\","
-    			+ "\"eventLog\":\"testing\","
-    			+ "\"origin\":\"127.188.19.76\","
-    			+ "\"quantity\"" + ": " + 6 + "}";
+    	String eventLogJSON = new JsonTemplate(new StringBuilder()
+    			.append("{")
+    			.append("level : ERROR,")
+    			.append("eventDescription : @s,")
+    			.append("eventLog : @s,")
+    			.append("origin : @ip,")
+    			.append("quantity : @f")
+    			.append("}").toString()).prettyString();
     	String contentType = "application/json;charset=UTF-8";
     	
     	//just creating the object
@@ -149,11 +163,14 @@ public class EventLogControllerAndOauthTests {
     @Test
     public void whenPerformHttpGetLogByIdWithToken() throws Exception {
     	String accessToken = getAccessToken("teste@teste.com","teste123");
-    	String eventLogJSON = "{\"level\":\"ERROR\","
-    			+ "\"eventDescription\":\"test\","
-    			+ "\"eventLog\":\"testing\","
-    			+ "\"origin\":\"127.188.19.76\","
-    			+ "\"quantity\"" + ": " + 6 + "}";
+    	String eventLogJSON = new JsonTemplate(new StringBuilder()
+    			.append("{")
+    			.append("level : ERROR,")
+    			.append("eventDescription : @s,")
+    			.append("eventLog : @s,")
+    			.append("origin : @ip,")
+    			.append("quantity : @f")
+    			.append("}").toString()).prettyString();
     	String contentType = "application/json;charset=UTF-8";
     	
     	//just creating the object
@@ -172,11 +189,14 @@ public class EventLogControllerAndOauthTests {
     @Test
     public void whenPerformHttpGetLogByLevelWithoutToken() throws Exception {
     	String accessToken = getAccessToken("teste@teste.com","teste123");
-    	String eventLogJSON = "{\"level\":\"ERROR\","
-    			+ "\"eventDescription\":\"test\","
-    			+ "\"eventLog\":\"testing\","
-    			+ "\"origin\":\"127.188.19.76\","
-    			+ "\"quantity\"" + ": " + 6 + "}";
+    	String eventLogJSON = new JsonTemplate(new StringBuilder()
+    			.append("{")
+    			.append("level : ERROR,")
+    			.append("eventDescription : @s,")
+    			.append("eventLog : @s,")
+    			.append("origin : @ip,")
+    			.append("quantity : @f")
+    			.append("}").toString()).prettyString();
     	String contentType = "application/json;charset=UTF-8";
     	
     	//just creating the object
@@ -194,11 +214,14 @@ public class EventLogControllerAndOauthTests {
     @Test
     public void whenPerformHttpGetLogByLevelWithToken() throws Exception {
     	String accessToken = getAccessToken("teste@teste.com","teste123");
-    	String eventLogJSON = "{\"level\":\"ERROR\","
-    			+ "\"eventDescription\":\"test\","
-    			+ "\"eventLog\":\"testing\","
-    			+ "\"origin\":\"127.188.19.76\","
-    			+ "\"quantity\"" + ": " + 6 + "}";
+    	String eventLogJSON = new JsonTemplate(new StringBuilder()
+    			.append("{")
+    			.append("level : ERROR,")
+    			.append("eventDescription : @s,")
+    			.append("eventLog : @s,")
+    			.append("origin : @ip,")
+    			.append("quantity : @f")
+    			.append("}").toString()).prettyString();
     	String contentType = "application/json;charset=UTF-8";
     	
     	//just creating the object
@@ -218,11 +241,14 @@ public class EventLogControllerAndOauthTests {
     @Test
     public void whenPerformHttpGetLogOrderByWithoutToken() throws Exception {
     	String accessToken = getAccessToken("teste@teste.com","teste123");
-    	String eventLogJSON = "{\"level\":\"ERROR\","
-    			+ "\"eventDescription\":\"test\","
-    			+ "\"eventLog\":\"testing\","
-    			+ "\"origin\":\"127.188.19.76\","
-    			+ "\"quantity\"" + ": " + 6 + "}";
+    	String eventLogJSON = new JsonTemplate(new StringBuilder()
+    			.append("{")
+    			.append("level : ERROR,")
+    			.append("eventDescription : @s,")
+    			.append("eventLog : @s,")
+    			.append("origin : @ip,")
+    			.append("quantity : @f")
+    			.append("}").toString()).prettyString();
     	String contentType = "application/json;charset=UTF-8";
     	
     	//just creating the object
@@ -240,11 +266,14 @@ public class EventLogControllerAndOauthTests {
     @Test
     public void whenPerformHttpGetLogOrderByWithToken() throws Exception {
     	String accessToken = getAccessToken("teste@teste.com","teste123");
-    	String eventLogJSON = "{\"level\":\"ERROR\","
-    			+ "\"eventDescription\":\"test\","
-    			+ "\"eventLog\":\"testing\","
-    			+ "\"origin\":\"127.188.19.76\","
-    			+ "\"quantity\"" + ": " + 6 + "}";
+    	String eventLogJSON = new JsonTemplate(new StringBuilder()
+    			.append("{")
+    			.append("level : ERROR,")
+    			.append("eventDescription : @s,")
+    			.append("eventLog : @s,")
+    			.append("origin : @ip,")
+    			.append("quantity : @f")
+    			.append("}").toString()).prettyString();
     	String contentType = "application/json;charset=UTF-8";
     	
     	//just creating the object
